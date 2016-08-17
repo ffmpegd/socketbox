@@ -1,5 +1,5 @@
 #include "LinuxTcpServer.h"
-#include "INetAddress.h"
+#include "SocketBuffer.h"
 #include <cstdio>
 
 int main(int argc, char **argv)
@@ -7,7 +7,7 @@ int main(int argc, char **argv)
 	INetAddress address;
 	LinuxTcpServer server;
 	LinuxTcpServer worker;
-	ISocketBuffer buf;
+	SocketBuffer b("SocketBuffer\n");
 
 	if( !server.Open() )
 	{
@@ -30,7 +30,14 @@ int main(int argc, char **argv)
 		printf("server.Accept() failed!\n");
 		return -1;
 	}
-	worker.Send(buf);
+	while(1)
+	{
+		SocketBuffer sb(32);
+		worker.Recv(sb);
+		perror("worker.Recv()");
+		worker.Send(sb);
+		perror("worker.Send()");
+	}
 	printf("address(%d, %d, %s)\n", address.GetDomain(), address.GetPort(), address.GetIp().data());
 	address.SetIp("192.168.1.111");
 	address.SetPort(2222);

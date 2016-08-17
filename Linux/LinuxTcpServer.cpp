@@ -1,6 +1,5 @@
 #include <unistd.h>
 #include <sys/socket.h>
-#include "INetAddress.h"
 #include "LinuxTcpServer.h"
 
 bool LinuxTcpServer::Open(void)
@@ -40,7 +39,7 @@ bool LinuxTcpServer::Send(ISocketBuffer& b)
 }
 bool LinuxTcpServer::Recv(ISocketBuffer& b)
 {
-	if( false == handler.IsValid() || b.GetData() || b.GetSize() < 1 )
+	if( false == handler.IsValid() || NULL == b.GetData() || b.GetSize() < 1 )
 	{
 		return false;
 	}
@@ -59,7 +58,7 @@ void LinuxTcpServer::SetSocketHandler(const SocketHandler& s)
 {
 	handler = s;
 }
-SocketHandler& LinuxTcpServer::GetSocketHandler(void)
+const SocketHandler& LinuxTcpServer::GetSocketHandler(void) const
 {
 	return handler;
 }
@@ -88,7 +87,7 @@ bool LinuxTcpServer::Accept(class ISocket &s)
 	}
 	INetAddress a;
 	int retlen = a.GetLength();
-	s.GetSocketHandler().SetHandler( accept(handler.GetHandler(), (struct sockaddr*)a.GetAddress(), (socklen_t*)&retlen) );
+	s.SetSocketHandler( SocketHandler(accept(handler.GetHandler(), (struct sockaddr*)a.GetAddress(), (socklen_t*)&retlen)) );
 	return s.GetSocketHandler().IsValid();
 }
 

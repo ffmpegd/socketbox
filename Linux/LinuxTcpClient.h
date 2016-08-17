@@ -1,9 +1,9 @@
-#ifndef __LINUX_TCP_SERVER_H__
-#define __LINUX_TCP_SERVER_H__
-#include "ITcpServer.h"
+#ifndef __TCP_LINUX_CLIENT_H__
+#define __TCP_LINUX_CLIENT_H__
+#include "ITcpClient.h"
 #include "INetAddress.h"
 
-class LinuxTcpServer : public ITcpServer
+class LinuxTcpClient : public ITcpClient
 {
 private:
 	SocketHandler handler;
@@ -16,14 +16,12 @@ public:
 	bool SendTo(IAddress&, ISocketBuffer&);
 	bool RecvFrom(IAddress&, ISocketBuffer&);
 	void SetSocketHandler(const SocketHandler&);
-	const SocketHandler& GetSocketHandler(void)const; 
+	const SocketHandler& GetSocketHandler(void)const;
 	int SocketDomain(void);
 	int SocketType(void);
 	int SocketProtocol(void);
 
-	bool Bind(const class IString &ip, int port);
-	bool Listen(int backlog);
-	bool Accept(class ISocket &s);
+	bool Connect(const IString& ip, int port);
 };
 
-#endif//__LINUX_TCP_SERVER_H__
+#endif//__TCP_LINUX_CLIENT_H__

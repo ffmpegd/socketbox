@@ -18,7 +18,7 @@ public:
 	virtual bool SendTo(IAddress&, ISocketBuffer&){IDebug::Assert(__func__);}
 	virtual bool RecvFrom(IAddress&, ISocketBuffer&){IDebug::Assert(__func__);}
 	virtual void SetSocketHandler(const SocketHandler&){IDebug::Assert(__func__);}
-	virtual SocketHandler& GetSocketHandler(void){IDebug::Assert(__func__);}
+	virtual const SocketHandler& GetSocketHandler(void)const{IDebug::Assert(__func__);}
 };
 
 #endif//__ISOCKET_H__
