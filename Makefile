@@ -3,9 +3,9 @@ CCFLAGS := -g -I. -ILinux
 
 Linux:= $(patsubst %.cpp, %.o, $(shell find Linux/ | grep ".cpp$$"))
 
-all: $(Linux)
+all: linuxtcpserver
 	@echo
-test: $(Linux) testbox.cpp
+linuxtcpserver: $(Linux) exsample/linuxtcpserver.cpp
 	$(CC) $(CCFLAGS) $+ -o $@
 
 $(Linux) : %.o : %.cpp
