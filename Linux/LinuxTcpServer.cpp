@@ -28,6 +28,22 @@ int LinuxTcpServer::SocketProtocol(void)
 {
 	return 0;
 }
+int LinuxTcpServer::Send(const void* p, const int l)
+{
+	if( false == handler.IsValid() || NULL == p || l < 1 )
+	{
+		return false;
+	}
+	return send(handler.GetHandler(), p, l, 0);
+}
+int LinuxTcpServer::Recv(void *p, const int l)
+{
+	if( false == handler.IsValid() || NULL == p || l < 1 )
+	{
+		return false;
+	}
+	return recv(handler.GetHandler(), p, l, 0);
+}
 bool LinuxTcpServer::Send(ISocketBuffer& b)
 {
 	if( false == handler.IsValid() || NULL == b.GetData() || b.GetLength() < 1 )
@@ -44,7 +60,7 @@ bool LinuxTcpServer::Recv(ISocketBuffer& b)
 		return false;
 	}
 	b.SetLength( recv(handler.GetHandler(), b.GetData(), b.GetSize(), 0) );
-	return (b.GetLength() < 1);
+	return (b.GetLength() > 0);
 }
 bool LinuxTcpServer::SendTo(IAddress& a, ISocketBuffer& b)
 {
@@ -61,6 +77,24 @@ void LinuxTcpServer::SetSocketHandler(const SocketHandler& s)
 const SocketHandler& LinuxTcpServer::GetSocketHandler(void) const
 {
 	return handler;
+}
+bool LinuxTcpServer::GetSocketName(IAddress& a)
+{
+	if( false == handler.IsValid() )
+	{
+		return false;
+	}
+	socklen_t len = a.GetLength();
+	return (getsockname(handler.GetHandler(), (struct sockaddr*)a.GetAddress(), &len)==0);
+}
+bool LinuxTcpServer::GetPeerName(IAddress& a)
+{
+	if( false == handler.IsValid() )
+	{
+		return false;
+	}
+	socklen_t len = a.GetLength();
+	return (getpeername(handler.GetHandler(), (struct sockaddr*)a.GetAddress(), &len)==0);
 }
 bool LinuxTcpServer::Bind(const class IString &ip, int port)
 {

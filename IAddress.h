@@ -6,6 +6,7 @@ class IAddress
 {
 public:
 	virtual void* GetAddress(void){IDebug::Assert(__func__);}	
+	virtual const int GetLength(void)const{IDebug::Assert(__func__);}
 };
 
 #endif//__IADDRESS_H__

@@ -22,13 +22,13 @@ SocketBuffer::~SocketBuffer(void)
 	length = 0;
 	result = 0;
 }
-SocketBuffer::SocketBuffer(int size)
+SocketBuffer::SocketBuffer(int sz)
 {
 	data = (char*)0;	
 	size = 0;
 	length = 0;
 	result = 0;
-	Alloc(size);
+	Alloc(sz);
 }
 SocketBuffer::SocketBuffer(const IString& s)
 {
@@ -39,17 +39,17 @@ SocketBuffer::SocketBuffer(const IString& s)
 	*this = s;
 }
 
-bool SocketBuffer::Alloc(int size)
+bool SocketBuffer::Alloc(int sz)
 {
 	if( data )
 	{
 		delete data;
 		data = (char*)0;
 	}
-	data = new char[size];
+	data = new char[sz];
 	if( data )
 	{
-		this->size = size;
+		size = sz;
 		length = 0;
 		result = 0;
 	}

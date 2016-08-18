@@ -44,7 +44,7 @@ void* INetAddress::GetAddress(void)
 {
 	return (void*)&address;
 }
-const int INetAddress::GetLength(void)
+const int INetAddress::GetLength(void) const
 {
 	return sizeof(address);
 }

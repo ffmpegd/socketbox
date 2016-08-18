@@ -11,12 +11,22 @@ private:
 public:
 	bool Open(void);
 	bool Close(void);
+
 	bool Send(ISocketBuffer&);
 	bool Recv(ISocketBuffer&);
+
+	int Send(const void*, const int);
+	int Recv(void*, const int);
+
 	bool SendTo(IAddress&, ISocketBuffer&);
 	bool RecvFrom(IAddress&, ISocketBuffer&);
+
 	void SetSocketHandler(const SocketHandler&);
 	const SocketHandler& GetSocketHandler(void)const; 
+
+	bool GetSocketName(IAddress&);
+	bool GetPeerName(IAddress&);
+
 	int SocketDomain(void);
 	int SocketType(void);
 	int SocketProtocol(void);

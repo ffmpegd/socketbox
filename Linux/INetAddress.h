@@ -22,7 +22,7 @@ public:
 	const int GetDomain(void);
 	const void SetDomain(int);
 	void* GetAddress(void);
-	const int GetLength(void);
+	const int GetLength(void)const;
 };
 
 #endif//__INETADDRESS_H__
