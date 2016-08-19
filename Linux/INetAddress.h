@@ -14,12 +14,13 @@ public:
 
 public:
 	void SetIp(const IString& ip);
-	const IString GetIp(void);
+	const IString GetIp(void)const;
+	const int GetIpv4(void)const;
 
 	void SetPort(int port);
-	const int GetPort(void);
+	const int GetPort(void)const;
 
-	const int GetDomain(void);
+	const int GetDomain(void)const;
 	const void SetDomain(int);
 	void* GetAddress(void);
 	const int GetLength(void)const;

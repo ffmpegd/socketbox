@@ -20,15 +20,19 @@ void INetAddress::SetIp(const IString& ip)
 	}
 	address.sin_addr.s_addr = inet_addr(ip.data());
 }
-const IString INetAddress::GetIp(void)
+const IString INetAddress::GetIp(void)const
 {
 	return IString(inet_ntoa(address.sin_addr));
+}
+const int INetAddress::GetIpv4(void)const
+{
+	return int(address.sin_addr.s_addr);
 }
 void INetAddress::SetPort(int port)
 {
 	address.sin_port = htons((short)port);
 }
-const int INetAddress::GetPort(void)
+const int INetAddress::GetPort(void)const
 {
 	return ntohs(address.sin_port);
 }
@@ -36,7 +40,7 @@ const void INetAddress::SetDomain(int domain)
 {
 	address.sin_family = domain;
 }
-const int INetAddress::GetDomain(void)
+const int INetAddress::GetDomain(void)const
 {
 	return address.sin_family;
 }

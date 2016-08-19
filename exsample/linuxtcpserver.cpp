@@ -14,7 +14,7 @@ int main(int argc, char **argv)
 		printf("server.Open() failed!\n");
 		return -1;
 	}
-	option.SetSocket(server);
+	option.AttachSocket(server);
 	if( !option.EnableReuseAddress() )
 	{
 		printf("option.EnableReuseAddress() failed!\n");

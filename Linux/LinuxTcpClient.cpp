@@ -2,66 +2,68 @@
 #include <sys/socket.h>
 #include "LinuxTcpClient.h"
 
+
 bool LinuxTcpClient::Open(void)
 {
-	handler.SetHandler( socket(SocketDomain(), SocketType(), SocketProtocol()) );
-	return handler.IsValid();
+	return LinuxTcpSocket::Open();
 }
 bool LinuxTcpClient::Close(void)
 {
-	if( handler.IsValid() )
-	{
-		close(handler.GetHandler());
-		handler.SetHandler(handler.InvalidSocket());
-	}
-	return !handler.IsValid();
+	return LinuxTcpSocket::Close();
 }
 int LinuxTcpClient::SocketDomain(void)
 {
-	return AF_INET;
+	return LinuxTcpSocket::SocketDomain();
 }
 int LinuxTcpClient::SocketType(void)
 {
-	return SOCK_STREAM;
+	return LinuxTcpSocket::SocketType();
 }
 int LinuxTcpClient::SocketProtocol(void)
 {
-	return 0;
+	return LinuxTcpSocket::SocketProtocol();
+}
+int LinuxTcpClient::Send(const void* p, const int l)
+{
+	return LinuxTcpSocket::Send(p, l);
+}
+int LinuxTcpClient::Recv(void *p, const int l)
+{
+	return LinuxTcpSocket::Recv(p, l);
 }
 bool LinuxTcpClient::Send(ISocketBuffer& b)
 {
-	if( false == handler.IsValid() || NULL == b.GetData() || b.GetLength() < 1 )
-	{
-		return false;	
-	}
-	b.SetResult( send(handler.GetHandler(), b.GetData(), b.GetLength(), 0) );
-	return (b.GetResult() > 0);
+	return LinuxTcpSocket::Send(b);
 }
 bool LinuxTcpClient::Recv(ISocketBuffer& b)
 {
-	if( false == handler.IsValid() || NULL == b.GetData() || b.GetSize() < 1 )
-	{
-		return false;
-	}
-	b.SetLength( recv(handler.GetHandler(), b.GetData(), b.GetSize(), 0) );
-	return (b.GetLength() < 1);
+	return LinuxTcpSocket::Recv(b);
 }
 bool LinuxTcpClient::SendTo(IAddress& a, ISocketBuffer& b)
 {
-	return Send(b);
+	return LinuxTcpSocket::SendTo(a, b);
 }
 bool LinuxTcpClient::RecvFrom(IAddress& a, ISocketBuffer& b)
 {
-	return Recv(b);
+	return LinuxTcpSocket::RecvFrom(a, b);
 }
 void LinuxTcpClient::SetSocketHandler(const SocketHandler& s)
 {
-	handler = s;
+	return LinuxTcpSocket::SetSocketHandler(s);
 }
 const SocketHandler& LinuxTcpClient::GetSocketHandler(void) const
 {
-	return handler;
+	return LinuxTcpSocket::GetSocketHandler();
 }
+bool LinuxTcpClient::GetSocketName(IAddress& a)
+{
+	return LinuxTcpSocket::GetSocketName(a);
+}
+bool LinuxTcpClient::GetPeerName(IAddress& a)
+{
+	return LinuxTcpSocket::GetPeerName(a);
+}
+
 bool LinuxTcpClient::Connect(const IString& ip, int port)
 {
 	if( false == handler.IsValid() )

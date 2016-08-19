@@ -1,11 +1,14 @@
-#ifndef __TCP_LINUX_CLIENT_H__
-#define __TCP_LINUX_CLIENT_H__
+#ifndef __LINUX_TCP_SOCKET_H__
+#define __LINUX_TCP_SOCKET_H__
 #include "INetAddress.h"
-#include "ITcpClient.h"
-#include "LinuxTcpSocket.h"
+#include "SocketHandler.h"
+#include "ISocketBuffer.h"
 
-class LinuxTcpClient : public LinuxTcpSocket, public ITcpClient
+class LinuxTcpSocket
 {
+protected:
+	SocketHandler handler;
+
 public:
 	bool Open(void);
 	bool Close(void);
@@ -28,10 +31,6 @@ public:
 	int SocketDomain(void);
 	int SocketType(void);
 	int SocketProtocol(void);
-
-
-public:
-	bool Connect(const IString& ip, int port);
 };
 
-#endif//__TCP_LINUX_CLIENT_H__
+#endif//__LINUX_TCP_SOCKET_H__
