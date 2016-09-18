@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <string.h>
 #include "NetPacket.h"
 
@@ -17,7 +18,7 @@ bool NetPacket::MakePacket(const char *buf, const char cmd, const int len)
 	{
 		return false;
 	}
-	SetLength(len + 1 + 1 + 4);
+	SetLength(len + 1 + 1);
 	SetCommand(cmd);
 	SetData(buf, len);
 	return true;
@@ -36,11 +37,11 @@ void NetPacket::SetCommand(const int command)
 }
 void NetPacket::SetData(const char *buf, const int len)
 {
-	if( len < 1 || len < sizeof(m_data)-6 )
+	if( len < 1 || len > sizeof(m_data)-6 )
 	{
 		return;
 	}
-	memcpy(m_data + 5, buf, len);
+	memcpy(m_data + 6, buf, len);
 }
 const void* NetPacket::GetData(void)const
 {
@@ -54,4 +55,16 @@ const int NetPacket::GetLength(void)const
 	length |= (int(m_data[2]) << 8);
 	length |= (int(m_data[3]) << 0);
 	return length;
+}
+void NetPacket::ShowData(void)const
+{
+	for(int i = 0; i < GetLength()+4; i++)
+	{
+		printf("%02X ", m_data[i] & 0xFF);
+	}
+	printf("\n");
+}
+void NetPacket::ShowString(void)const
+{
+	printf("%s\n", m_data+6);
 }

@@ -18,6 +18,7 @@ public:
 	static bool DestroyConnection(void);
 	static bool DisassemblyPacket(void);
 	static bool Reconnect(void);
+	static bool SendString(const IString&);
 };
 
 #endif//__CLIENTMANAGER_H__

@@ -43,7 +43,7 @@ typedef enum
 
 class NetPacket
 {
-private:
+protected:
     char m_data[1<<14];
 
 public:
@@ -54,6 +54,8 @@ public:
 	void SetCommand(const int);
 	void SetData(const char*, const int);
 	bool MakePacket(const char*, const char, const int);
+	void ShowData(void)const;
+	void ShowString(void)const;
 
 public:
 	const void* GetData(void)const;

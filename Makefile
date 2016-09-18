@@ -1,7 +1,7 @@
 CPP := g++
 #ARCH:=powerpc-e300c3-linux-gnu-
 CC := $(ARCH)$(CPP)
-CCFLAGS := -lpthread -I. -Ilinux -Ibase -Iclient
+CCFLAGS := -lpthread -I. -Ilinux -Ibase -Iclient -g
 TARGET:= linuxtcpserver linuxtcpclient clientmanager clientserver packettest
 
 

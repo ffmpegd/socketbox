@@ -1,6 +1,7 @@
 #include <pthread.h>
 #include "NetPacket.h"
 #include "SocketBuffer.h"
+#include "PacketMaker.h"
 #include "ClientManager.h"
 #include "LinuxTcpInfo.h"
 #include "LinuxTcpOption.h"
@@ -35,9 +36,17 @@ void* ClientManager::ThreadEntry(void*)
 		{
 			DisassemblyPacket();
 		}
-		else
+		else if( !client.GetSocketHandler().IsValid() )
 		{
 			Reconnect();
+		}
+		else
+		{
+			info.GetInfo(client);
+			if( info.GetState() != 1 )
+			{
+				Reconnect();
+			}
 		}
 	}
 }
@@ -69,8 +78,23 @@ bool ClientManager::Reconnect(void)
 }
 bool ClientManager::DisassemblyPacket(void)
 {
-	if( (queue.Size() + 1) % 32  == 0 )
+	PacketMaker packet;
+	if( packet.GetPacket(queue) )
 	{
-		printf("%s(%s,%d).size(%d)\n", __func__, address.GetIp().data(), address.GetPort(), queue.Size());
+		packet.ShowData();
 	}
+}
+bool ClientManager::SendString(const IString& s)
+{
+	PacketMaker packet;
+
+	if( packet.MakePacket(s.data(), 0x00, s.length()) )
+	{
+		if( client.Send(packet.GetData(), packet.GetLength()+4) > 0 )
+		{
+			packet.ShowData();
+			packet.ShowString();
+		}
+	}
+	return false;
 }
