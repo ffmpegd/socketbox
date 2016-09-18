@@ -1,5 +1,7 @@
-CC := g++
-CCFLAGS := -g -I. -ILinux
+CPP := g++
+ARCH:=powerpc-e300c3-linux-gnu-
+CC := $(ARCH)$(CPP)
+CCFLAGS := -g -I. -ILinux -IBase
 
 Linux:= $(patsubst %.cpp, %.o, $(shell find Linux/ | grep ".cpp$$"))
 TARGET:= linuxtcpserver linuxtcpclient
