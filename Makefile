@@ -11,13 +11,13 @@ all: $(TARGET)
 	@echo
 
 linuxtcpserver: $(Linux) exsample/linuxtcpserver.cpp
-	$(CC) $(CCFLAGS) $+ -o $@
+	$(CC) $(CCFLAGS) $+ -o bin/$@
 
 linuxtcpclient: $(Linux) exsample/linuxtcpclient.cpp
-	$(CC) $(CCFLAGS) $+ -o $@
+	$(CC) $(CCFLAGS) $+ -o bin/$@
 
 $(Linux) : %.o : %.cpp
 	$(CC) $(CCFLAGS) -c $< -o $@
 
 clean:
-	@rm -rf $(Linux) $(TARGET)
+	@rm -rf $(Linux) $(TARGET) bin/*
