@@ -6,6 +6,7 @@
 bool LinuxSocketOption::AttachSocket(const ISocket& s)
 {
 	handler = s.GetSocketHandler();
+	return handler.IsValid();
 }
 
 bool LinuxSocketOption::EnableReuseAddress(void)
