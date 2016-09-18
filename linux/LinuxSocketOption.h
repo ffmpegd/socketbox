@@ -1,6 +1,5 @@
 #ifndef __LINUX_SOCKET_OPTION_H__
 #define __LINUX_SOCKET_OPTION_H__
-#include "ISocket.h"
 #include "ISocketOption.h"
 
 class LinuxSocketOption : public ISocketOption

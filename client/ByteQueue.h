@@ -1,13 +1,12 @@
 #ifndef __BYTEQUEUE__
 #define __BYTEQUEUE__
 #include <list>
-#include <xstring>
-#include "socketdefine.h"
+#include <xstring.h>
 
 class ByteQueue
 {
 	private:
-		size_t m_size;
+		int m_size;
 		list<char> m_queue;
 
 	public:
@@ -17,27 +16,22 @@ class ByteQueue
 		}
 
 	public:
-		size_t Size() const	
+		int Size() const	
 		{
 			return m_size;
 		}
 
 	public://PushBack
-		void PushBack(const uchar c)
+		void PushBack(const char c)
 		{
 			m_size++;
 			m_queue.push_back(c);	
 		}
-		void PushBack(uint len)
+		void PushBack(char *buf, int len)
 		{
-			uint lenin = htonl(len);
-			PushBack((uchar*)&lenin, sizeof(len));
+			PushBack((const char*)buf, len);
 		}
-		void PushBack(cchar *buf, size_t len)
-		{
-			PushBack((const uchar*)buf, len);
-		}
-		void PushBack(const unsigned char *buf, size_t len)
+		void PushBack(const  char *buf, int len)
 		{
 			if( NULL == buf )
 				return;
@@ -51,9 +45,13 @@ class ByteQueue
 		{
 			PushBack(data.data(), data.length());
 		}
+		void PushBack(const void* buf, int len)
+		{
+			PushBack((const char*)buf, len);
+		}
 
 	public://PushFront
-		void PushFront(const uchar c)
+		void PushFront(const char c)
 		{
 			m_size++;
 			m_queue.push_front(c);	
@@ -62,18 +60,13 @@ class ByteQueue
 		{
 			PushFront(data.data(), data.length());
 		}
-		void PushFront(uint len)
+		void PushFront(const unsigned char *buf, int len)
 		{
-			uint lenin = htonl(len);
-			PushFront((uchar*)&lenin, sizeof(len));
+			PushFront((const char*)buf, len);
 		}
-		void PushFront(const char *buf, size_t len)
+		void PushFront(const char *buf, int len)
 		{
-			PushFront((uchar*)buf, len);
-		}
-		void PushFront(const uchar *buf, size_t len)
-		{
-			if( NULL == buf )
+			if( NULL == buf || len < 1)
 				return;
 			for(int i = 0; i < len; i++)
 			{
@@ -83,9 +76,9 @@ class ByteQueue
 		}
 
 	public://PopFront
-		unsigned char PopFront()
+		 char PopFront()
 		{
-			unsigned char c = 0;
+			 char c = 0;
 
 			if( m_size > 0 )
 			{
@@ -95,7 +88,7 @@ class ByteQueue
 			}
 			return c;
 		}
-		size_t PopFront(unsigned char *buf, size_t len)
+		int PopFront( char *buf, int len)
 		{
 			if( NULL == buf )
 				return -1;
@@ -116,9 +109,9 @@ class ByteQueue
 		}
 
 	public://PopBack
-		unsigned char PopBack()
+		 char PopBack()
 		{
-			unsigned char c = 0;
+			 char c = 0;
 			if( m_size > 0 )
 			{
 				c = m_queue.back();
@@ -126,7 +119,7 @@ class ByteQueue
 			}
 			return c;
 		}
-		size_t PopBack(unsigned char *buf, size_t len)
+		int PopBack( char *buf, int len)
 		{
 			if( len < 1 )
 				return -1;

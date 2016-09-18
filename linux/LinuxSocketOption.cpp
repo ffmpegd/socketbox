@@ -55,7 +55,7 @@ bool LinuxSocketOption::DisableBlock(void)
 	{
 		return false;
 	}
-	int flags = fcntl(handler.GetHandler(), F_GETFL, 0);
+	int flags = fcntl(handler.GetHandler(), F_GETFL);
 	if( -1 == flags )
 	{
 		return false;

@@ -1,6 +1,7 @@
 #ifndef __ISOCKETOPTION_H__
 #define __ISOCKETOPTION_H__
 #include "IDebug.h"
+#include "ISocket.h"
 
 class ISocketOption
 {
