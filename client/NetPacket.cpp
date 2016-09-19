@@ -1,7 +1,8 @@
-#include <stdio.h>
 #include <string.h>
 #include "NetPacket.h"
 
+int(*NetPacket::Trace)(const char*,...)=0;
+int(*NetPacket::Debug)(const char*,...)=0;
 
 NetPacket::NetPacket(void)
 {
@@ -60,11 +61,19 @@ void NetPacket::ShowData(void)const
 {
 	for(int i = 0; i < GetLength()+4; i++)
 	{
-		printf("%02X ", m_data[i] & 0xFF);
+		NetPacketTrace("%02X ", m_data[i] & 0xFF);
 	}
-	printf("\n");
+	NetPacketTrace("\n",0);
 }
 void NetPacket::ShowString(void)const
 {
-	printf("%s\n", m_data+6);
+	NetPacketTrace("%s\n", m_data+6);
+}
+void NetPacket::RegisterTrace(int(*trace)(const char*,...))
+{
+	NetPacket::Trace = trace;
+}
+void NetPacket::RegisterDebug(int(*debug)(const char*,...))
+{
+	NetPacket::Debug = debug;
 }

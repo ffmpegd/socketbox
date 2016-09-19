@@ -19,34 +19,48 @@ bool ClientManager::RunThread(void)
 }
 void* ClientManager::ThreadEntry(void*)
 {
+	time_t lastrecv = 0;
+	time_t reconnec = 0;
 	LinuxTcpInfo info;
 	LinuxSocketOption option;
 
 	option.AttachSocket(client);
 	option.DisableBlock();
+	lastrecv = time(0);
+	reconnec = lastrecv;
 
 	while(1)
 	{
+		time_t now = time(0);
 		SocketBuffer buffer(1024);
 		if( client.Recv(buffer) )
 		{
 			queue.PushBack(buffer.GetData(), buffer.GetLength());
-		}
-		else if( info.GetInfo(client) && info.GetState() == 1)
-		{
-			DisassemblyPacket();
+			printf("Recv(%d)\n", buffer.GetLength());
+			lastrecv = now;
 		}
 		else if( !client.GetSocketHandler().IsValid() )
 		{
-			Reconnect();
+			if( now - reconnec > 5 )
+			{
+				Reconnect();
+				reconnec = now;
+				printf("Reconnect(%d)\n", __LINE__);
+			}
 		}
-		else
+		else if( (now - lastrecv) > 2 )
 		{
+			lastrecv = now;
 			info.GetInfo(client);
 			if( info.GetState() != 1 )
 			{
 				Reconnect();
+				printf("Reconnect(%d)\n", __LINE__);
 			}
+		}
+		if( queue.Size() > 4 )
+		{
+			DisassemblyPacket();
 		}
 	}
 }
@@ -82,6 +96,7 @@ bool ClientManager::DisassemblyPacket(void)
 	if( packet.GetPacket(queue) )
 	{
 		packet.ShowData();
+		packet.ShowString();
 	}
 }
 bool ClientManager::SendString(const IString& s)
@@ -94,6 +109,10 @@ bool ClientManager::SendString(const IString& s)
 		{
 			packet.ShowData();
 			packet.ShowString();
+		}
+		else
+		{
+			client.Close();
 		}
 	}
 	return false;

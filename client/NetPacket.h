@@ -60,5 +60,31 @@ public:
 public:
 	const void* GetData(void)const;
 	const int GetLength(void)const;
+
+public:
+	static void RegisterTrace(int(*Trace)(const char*,...));
+	static void RegisterDebug(int(*Debug)(const char*,...));
+private:
+	static int(*Trace)(const char*,...);
+	static int(*Debug)(const char*,...);
 };
+
+#define NetPacketTrace(fmt,...)\
+do{														\
+	if( NetPacket::Trace )								\
+	{													\
+		NetPacket::Trace(fmt,__VA_ARGS__);				\
+	}													\
+}while(0)
+
+#define NetPacketDebug(fmt,...)\
+do{														\
+	if( NetPacket::Debug)								\
+	{													\
+		NetPacket::Debug("%s,%d", __FILE__, __LINE__);	\
+		NetPacket::Debug("%s:", __func__);				\
+		NetPacket::Debug(fmt,__VA_ARGS__);				\
+	}													\
+}while(0)
+
 #endif//__NETPACKET_H__
